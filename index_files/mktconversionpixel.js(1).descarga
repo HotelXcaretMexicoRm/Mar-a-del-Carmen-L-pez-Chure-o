@@ -1,0 +1,25 @@
+function getPTCampaignCookie(name){ 
+    var match = document.cookie.match(RegExp('(?:^|;\\s*)' + name + '=([^;]*)')); 
+    return match ? match[1] : null; 
+}
+if(getPTCampaignCookie('ptCampaignSource') != null){		                    
+    for(var dl = 0; dl<dataLayer.length; dl++){
+        if(dataLayer[dl].EventName === 'HotelChoosePaymentReservation-Remarketing'){            
+            if((typeof dataLayer[dl].ReservationId !=='undefined') && (typeof dataLayer[dl].TotAmount !=='undefined')){
+	    		var ptCampaignCookie = JSON.parse(decodeURIComponent(decodeURI(getPTCampaignCookie('ptCampaignSource'))));
+	    		var img = new Image(1,1);        
+	    		if(typeof ptCampaignCookie.providerReference =='undefined'){
+	    			ptCampaignCookie.providerReference='';
+	    		}
+	    		if(typeof ptCampaignCookie.originId =='undefined'){
+	    			ptCampaignCookie.originId='';
+	    		}
+	    		img.setAttribute('style', 'display:none;border-style:none;');
+	    		img.setAttribute('alt','');
+	    		img.setAttribute('src', PT_CAMPAIGN_CONVERSION_API_URI +'campaign_conversion?campaignType='+ptCampaignCookie.campaignType+'&campaignId='+ptCampaignCookie.campaignId+'&originId='+ptCampaignCookie.originId+'&providerReference='+ptCampaignCookie.providerReference+'&locator='+dataLayer[dl].ReservationId+'&amount='+dataLayer[dl].TotAmount+'&chId='+CAMPAIGN_CONVERSION_CHANNEL_ID); 
+	    		document.getElementsByTagName('body')[0].appendChild(img);    
+	    		break;
+	    	}
+		}	    
+    }
+}

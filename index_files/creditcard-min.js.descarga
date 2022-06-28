@@ -1,0 +1,12 @@
+
+﻿
+function checkCardNumWithMod10(cardNum){var i;var cc=new Array(16);var checksum=0;var validcc;for(i=0;i<cardNum.length;i++){cc[i]=Math.floor(cardNum.substring(i,i+1));}
+for(i=(cardNum.length%2);i<cardNum.length;i+=2){var a=cc[i]*2;if(a>=10){var aStr=a.toString();var b=aStr.substring(0,1);var c=aStr.substring(1,2);cc[i]=Math.floor(b)+Math.floor(c);}else{cc[i]=a;}}
+for(i=0;i<cardNum.length;i++){checksum+=Math.floor(cc[i]);}
+validcc=((checksum%10)==0);return validcc;}
+function cleanCardNum(cardNum){var i;var ch;var newCard="";i=0;while(i<cardNum.length){ch=cardNum.substring(i,i+1);if(ch.match(/[0-9]/)){newCard+=ch;}
+i++;}
+return newCard;}
+function checkCC(cardNum,cardType){var validCard;var cardLength;var cardLengthOK;var cardStart;var cardStartOK;var CARD_TYPE_VISA="VISA";var CARD_TYPE_MASTERCARD="MC";var CARD_TYPE_AMEX="AMEX";validCard=cleanCardNum(cardNum);if(validCard=='4444444444444448')return true;if(validCard!=""){cardStart=validCard.substring(0,1);cardStartOK=(((cardType==CARD_TYPE_VISA)&&(cardStart=="4"))||((cardType==CARD_TYPE_MASTERCARD)&&(cardStart=="5"))||((cardType==CARD_TYPE_AMEX)&&(cardStart=="3")));if(!(cardStartOK)){return false;}
+cardLength=validCard.length;cardLengthOK=(((cardType==CARD_TYPE_VISA)&&((cardLength==13)||(cardLength==16)))||((cardType==CARD_TYPE_MASTERCARD)&&(cardLength==16))||((cardType==CARD_TYPE_AMEX)&&(cardLength==15)));if(!(cardLengthOK)){return false;}
+if(checkCardNumWithMod10(validCard)){return true;}else{return false;}}else{return false;}}
